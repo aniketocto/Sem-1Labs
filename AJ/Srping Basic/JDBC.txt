@@ -1,0 +1,184 @@
+package edu.met.p1;
+
+public class MovieBean {
+	int mId;
+	String mName;
+	String director;
+	
+	public MovieBean(int mId, String mName, String director) {
+		super();
+		this.mId = mId;
+		this.mName = mName;
+		this.director = director;
+	}
+	public MovieBean()
+	{
+		super();
+	}
+	
+	public int getmId() {
+		return mId;
+	}
+	public void setmId(int mId) {
+		this.mId = mId;
+	}
+	public String getmName() {
+		return mName;
+	}
+	public void setmName(String mName) {
+		this.mName = mName;
+	}
+	public String getDirector() {
+		return director;
+	}
+	public void setDirector(String director) {
+		this.director = director;
+	}
+	
+	@Override
+	public String toString() {
+		return "MovieBean [mId=" + mId + ", mName=" + mName + ", director=" + director + "]";
+	}
+}
+
+
+
+/////-------------------------------------/////
+
+package edu.met.p1;
+
+import java.util.List;
+
+import org.springframework.jdbc.core.JdbcTemplate;
+
+public class MoviesDAO {
+	JdbcTemplate jdbcT;
+
+	public MoviesDAO(JdbcTemplate jdbcT) {
+		super();
+		this.jdbcT = jdbcT;
+	}
+	
+	void insertRow(MovieBean m1)
+	{
+		String insertQ = "insert into tbl_movie values(" + m1.getmId() + ",'" + m1.getmName() + "','" + m1.getDirector() + "')";
+		jdbcT.update(insertQ);
+	}
+	
+	void updateRow(MovieBean m1)
+	{
+		String updateQ = "update tbl_movie set mName=?, director=? where mId=?";
+		jdbcT.update(updateQ, m1.getmName(), m1.getDirector(), m1.getmId());
+	}
+	
+	List<MovieBean> getAllMovies()
+	{
+		String selQ = "select * from tbl_movie";
+		return (List<MovieBean>) jdbcT.query(selQ, MovieRowMapper());
+	}
+	
+	
+}
+
+
+/////-------------------------------------/////
+
+package edu.met.p1;
+
+import java.util.List;
+
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+public class MoviesImpl {
+
+	private static ApplicationContext ctx;
+	public static void main(String[] args) {
+		ctx = new ClassPathXmlApplicationContext("AppCtx.xml");
+		
+		MovieBean m1 = (MovieBean)ctx.getBean("movie");
+		MoviesDAO dao = (MoviesDAO)ctx.getBean("moviesDAO");
+//		dao.insertRow(m1);
+		
+		m1.setmId(101);
+		m1.setmName("KHNH");
+		m1.setDirector("KJO");
+		
+//		dao.updateRow(m1);
+		
+		List<MovieBean> l1 = dao.getAllMovies();
+		
+		System.out.println("mId\t mName\t director");
+		System.out.println("----------------------------------------------");
+		for(MovieBean p:l1) {
+		System.out.print(p.getmId() + "\t");
+		System.out.print(p.getmName() + "\t");
+		System.out.print(p.getDirector() + "\t");
+		}
+		System.out.println("----------------------------------------------");
+	}
+
+}
+
+
+
+/////-------------------------------------/////
+
+package edu.met.p1;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import org.springframework.jdbc.core.RowMapper;
+
+public class MovieRowMapper extends RowMapper<MovieBean> {
+	
+	@Override
+	public MovieBean mapRow(ResultSet rs, int arg1) throws SQLException {
+		MovieBean m1 = new MovieBean();
+		m1.setmId(rs.getInt(1));
+		m1.setmName(rs.getString(2));
+		m1.setDirector(rs.getString(3));
+	
+		return p1;
+	}
+	
+}
+
+
+
+/////-------------------------------------/////
+
+<beans
+ xmlns="http://www.springframework.org/schema/beans"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xmlns:p="http://www.springframework.org/schema/p"
+ xsi:schemaLocation="http://www.springframework.org/schema/beans
+ http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+ 
+ 	<bean id="ds" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+ 		<property name="driverClassName" value="org.postgresql.Driver" />
+		<property name="url" value="jdbc:postgresql://localhost:5432/postgres" />
+		<property name="username" value="postgres" />
+		<property name="password" value="password" />
+ 	</bean>
+ 	
+ 	<bean id="jdbcT" class="org.springframework.jdbc.core.JdbcTemplate">
+ 		<property name="dataSource" ref="ds" />
+ 	</bean>
+ 	
+ 	<bean id="moviesDAO" class="edu.met.p1.MoviesDAO">
+		<constructor-arg name="jdbcT" ref="jdbcT" />
+ 	</bean>
+ 
+ 	<bean id="movie" class="edu.met.p1.MovieBean">
+ 		<property name="mId" value="106" />
+ 		<property name="mName" value="KKKG" />
+ 		<property name="director" value="KJO" />
+ 	</bean>
+ 	
+</beans>
+
+
+/////-------------------------------------/////
+
