@@ -1,0 +1,37 @@
+////----Setter Injection -- make getter setter of the instance variable----////
+////----Constructor Injection -- make parameter constructor and super Constructor----////
+
+////----IMPLEMENTATION CLASS----////
+
+package edu.met.p1;
+
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+public class MobileImpl {
+	private static ApplicationContext ctx;
+	public static void main(String[] args) {
+		ctx = new ClassPathXmlApplicationContext("AppCtx.xml");
+		Mobile m1 = (Mobile)ctx.getBean("mobilebean");
+		
+		System.out.println(m1);
+		
+		Mobile m2 = (Mobile)ctx.getBean("mobilebean");
+		m2.setBrand("Iphone");
+		m2.setModel("10");
+		
+		System.out.println(m2);
+
+	}
+
+}
+
+
+////----APPCTX----////
+<bean id="mobilebean" class="edu.met.p1.Mobile" scope="prototype">
+	<property name="modelId" value="23"></property>
+	<property name="brand" value="Sumsang"></property>
+	<property name="model" value="Android S"></property>
+	<property name="ram" value="16GB"></property>
+	<property name="storage" value="512GB"></property>
+</bean>
