@@ -1,0 +1,108 @@
+package edu.met.p1;
+
+public class AddressBean {
+	String street;
+	String state;
+	String city;
+	
+	public String getStreet() {
+		return street;
+	}
+	public void setStreet(String street) {
+		this.street = street;
+	}
+	public String getState() {
+		return state;
+	}
+	public void setState(String state) {
+		this.state = state;
+	}
+	public String getCity() {
+		return city;
+	}
+	public void setCity(String city) {
+		this.city = city;
+	}
+	
+	@Override
+	public String toString() {
+		return "AddressBean [street=" + street + ", state=" + state + ", city=" + city + "]";
+	}
+}
+
+
+
+////-----------------------------------////
+
+package edu.met.p1;
+
+public class StudentBean {
+	int rollNo;
+	String name;
+	AddressBean address;
+	
+	public StudentBean(int rollNo, String name, AddressBean address) {
+		super();
+		this.rollNo = rollNo;
+		this.name = name;
+		this.address = address;
+	}
+
+	@Override
+	public String toString() {
+		return "StudentBean [rollNo=" + rollNo + ", name=" + name + ", address=" + address + "]";
+	}
+	
+	public void init() throws Exception{
+		System.out.println("........INIT CALLED.......");
+	}
+	
+	public void destroy() throws Exception
+	{
+		System.out.println("........DESTROY CALLED.......");
+	}
+}
+
+
+////-----------------------------------////
+
+package edu.met.p1;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+public class StudentImpl {
+	private static ConfigurableApplicationContext ctx;
+	public static void main(String[] args) {
+		ctx = new ClassPathXmlApplicationContext("AppCtx.xml");
+		StudentBean s1 = (StudentBean)ctx.getBean("StudentBean");
+		System.out.println(s1);
+		ctx.close();
+	}
+}
+
+
+////-----------------------------------////
+
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+ xmlns="http://www.springframework.org/schema/beans"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xmlns:p="http://www.springframework.org/schema/p"
+ xsi:schemaLocation="http://www.springframework.org/schema/beans
+ http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+	
+	<bean id="AddressBean" class="edu.met.p1.AddressBean">
+		<property name="street" value="5th Street" />
+		<property name="city" value="Mumbai" />
+		<property name="state" value="Maharashtra" />
+	</bean>
+	
+	<bean id="StudentBean" class="edu.met.p1.StudentBean" init-method="init" destroy-method="destroy">
+		<constructor-arg index="0" value="2516" />
+		<constructor-arg index="1" value="Aniket"/>
+		<constructor-arg index="2">
+			<ref bean="AddressBean" />
+		</constructor-arg>
+	</bean>
+	
+</beans>
