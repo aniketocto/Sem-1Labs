@@ -1,0 +1,134 @@
+index.jsp
+
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+ pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html>
+<html>
+<body>
+	<form action="NextGuess.jsp">
+		<h1>Number Guesser</h1>
+		<h2>Select a number between 0 and 100</h2>
+		<input type="submit" value="submit" name="btnSub" />
+		<input type="hidden" name="low" value="0" />
+		<input type="hidden" name="high" value="100" />
+		<input type="hidden" name="count" value="0" />
+	</form>
+</body>
+</html>
+
+
+////-------------------------------------------------------------------------////
+next guess.jsp 
+
+	<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+	 pageEncoding="ISO-8859-1"%>
+	<!DOCTYPE html>
+	<html>
+	<body>
+		<%-- 1. Declare Guess variable --%>
+		<%! int guess; %>
+		
+		<%-- 2. Fetch All Variables --%>
+		<%
+		int low = Integer.parseInt(request.getParameter("low"));
+		int high = Integer.parseInt(request.getParameter("high"));
+		int count = Integer.parseInt(request.getParameter("count"));
+		
+		// 3. Compute Guess
+		guess = (low + high) / 2;
+		%>
+		
+		<form action="CheckResult.jsp">
+			<h2>My Guess no: <%= ++count %> is <%= guess %></h2>
+			<br />
+			<input type="radio" name="guesser" value="too_low" onclick="submit()" /> Too Low
+			<input type="radio" name="guesser" value="too_high" onclick="submit()" /> Too High
+			<input type="radio" name="guesser" value="prefect" onclick="submit()" /> Perfect
+		
+			<input type="hidden" name="low" value="<%=low %>" />
+			<input type="hidden" name="high" value="<%=high %>" />
+			<input type="hidden" name="count" value="<%=count %>" />
+		</form>
+	</body>
+	</html>
+
+////-------------------------------------------------------------------------////
+checkResult,jsp
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html>
+<html>
+<body>
+	<%
+		int low = Integer.parseInt(request.getParameter("low"));
+		int high = Integer.parseInt(request.getParameter("high"));
+		int count = Integer.parseInt(request.getParameter("count"));
+		int guess = (low+high)/2;
+		
+		String check = request.getParameter("guesser");
+		if(check.equals("prefect"))
+		{
+	%>
+		<jsp:forward page="Winner.jsp">
+			<jsp:param value="<%=count %>" name="count"/>
+			<jsp:param value="<%=guess %>" name="guess"/>
+		</jsp:forward>
+	<%
+		}
+		else if(low >= high)
+		{
+	%>
+		<jsp:forward page="cheater.jsp"/>
+	<%
+		}
+		else
+		{
+		 if(check.equals("too_low"))
+		 {
+			 low = guess;
+		 }
+		 else
+		 {
+			 high = guess;
+		 }
+	%>
+		<jsp:forward page="NextGuess.jsp">
+			<jsp:param value="<%=low %>" name="low"/>
+			<jsp:param value="<%=high %>" name="high"/>
+			<jsp:param value="<%=count %>" name="count"/>
+		</jsp:forward>
+	<%
+		}
+	%>
+</body>
+</html>
+
+////-------------------------------------------------------------------------////
+winner.jsp
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html>
+<html>
+<body>
+	<h1>I Guessed in <%=request.getParameter("count") %>attempts!</h1>
+	<h3>The Guess number is <%=request.getParameter("guess")%></h3>
+	<a href="index.jsp"> Play Again</a>
+</body>
+</html>
+
+
+////-------------------------------------------------------------------------////
+cheater.jsp
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+	<h1>You are a cheater!!! Don't Cheater</h1>
+	<a href="index.jsp"> Play Again</a>
+</body>
+</html>

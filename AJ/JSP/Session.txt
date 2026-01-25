@@ -1,0 +1,33 @@
+index.jsp
+
+<%@ page language="java" session="true" %>
+<!DOCTYPE html>
+<html>
+<body>
+    <%
+        out.println("Session ID: "+session.getId());
+        out.println("<p>Is New: " + session.isNew());
+        if(session.getAttribute("cntr") == null)
+        {
+            //This is first visit
+            out.println("<h1>This is your first visit");
+            //setup Counter
+            session.setAttribute("cntr", "1");
+        }
+        else
+        {
+            //Get Ols Value of counter
+            Integer cnt =
+            Integer.parseInt(session.getAttribute("cntr").toString());
+            //Update all old values
+            int cnt1 = cnt+1;
+            //display new msg
+            out.println("<h1>This is your visit no.: " + cnt1);
+            //set new value
+            session.setAttribute("cntr", ""+cnt1);
+        }
+        //Invalidate Session after 60seconds
+        session.setMaxInactiveInterval(60);
+    %>
+</body>
+</html>
