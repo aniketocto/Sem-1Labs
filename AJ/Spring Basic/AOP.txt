@@ -1,0 +1,167 @@
+package edu.met.p1;
+
+public class Account {
+	int acNo;
+	String acName;
+	double balance;
+	
+	public Account() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+	public Account(int acNo, String acName, double balance) {
+		super();
+		this.acNo = acNo;
+		this.acName = acName;
+		this.balance = balance;
+	}
+	public int getAcNo() {
+		return acNo;
+	}
+	public void setAcNo(int acNo) {
+		this.acNo = acNo;
+	}
+	public String getAcName() {
+		return acName;
+	}
+	public void setAcName(String acName) {
+		this.acName = acName;
+	}
+	public double getBalance() {
+		return balance;
+	}
+	public void setBalance(double balance) {
+		this.balance = balance;
+	}
+	
+	public void deposit(double amt)
+	{
+		this.balance += amt;
+	}
+	
+	public void withdraw(double amt)
+	{
+		if(this.balance-amt >= 0)
+		{
+			this.balance-=amt;
+			System.out.println("Withdraw");
+		}
+		else
+		{
+			throw new RuntimeException("Insufficient Balance");
+		}
+	}
+	
+	@Override
+	public String toString() {
+		return "Account [acNo=" + acNo + ", acName=" + acName + ", balance=" + balance + "]";
+	}
+	
+	
+}
+
+
+\\\\\\----------------------------------------------\\\\\
+
+
+package edu.met.p1;
+
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.*;
+
+@Aspect
+public class BankMain {
+	@Pointcut("execution(* edu.met.p1.Account.get*())")
+	void getPointcut(){}
+	
+	@Before("getPointcut()")
+	public void beforeAdvice()
+	{
+		System.out.println("Before Getter : ");
+	}
+	
+	@After("execution(* edu.met.p1.Account.deposit(..))")
+	public void afterAdviceD()
+	{
+		System.out.println("After Deposit : ");
+	}
+	
+	@After("execution(* edu.met.p1.Account.withdraw(..))")
+	public void afterAdviceW()
+	{
+		System.out.println("After Withdraw : ");
+	}
+	
+	@AfterReturning("execution(* edu.met.p1.Account.withdraw(..))")
+	public void afterAdviceWE() {
+		System.out.println("After Withdraw execution: ");
+	}
+	
+	@AfterThrowing("execution(* edu.met.p1.Account.withdraw(..))")
+	public void afterAdviceThrowing()
+	{
+		System.out.println("After Withdrae throwing: ");
+	}
+	
+	@Around("execution(* edu.met.p1.Account.setBalance(..))")
+	public Object aroundMethod(ProceedingJoinPoint jp) throws Throwable {
+	    System.out.println("Before method: " + jp.getSignature());
+	    Object res = jp.proceed();
+	    System.out.println("After method: " + jp.getSignature());
+	    return res;
+	}
+
+}
+
+
+/////---------------------------------------------------/////
+
+
+package edu.met.p1;
+
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+public class BamkImpl {
+
+	private static ApplicationContext ctx;
+	public static void main(String[] args) {
+		ctx = new ClassPathXmlApplicationContext("AppCtx.xml");
+		Account a1 = (Account)ctx.getBean("accountBean");
+		
+		System.out.println("Account No.: " + a1.getAcNo());
+		System.out.println("Account Name: " + a1.getAcName());
+		System.out.println("Account Balance: " + a1.getBalance());
+		
+		a1.deposit(3000);
+		a1.withdraw(3000);
+
+	}
+
+}
+
+
+/////---------------------------------------------------/////
+
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+xmlns="http://www.springframework.org/schema/beans"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xmlns:aop="http://www.springframework.org/schema/aop"
+ xsi:schemaLocation="http://www.springframework.org/schema/beans
+ http://www.springframework.org/schema/beans/spring-beans.xsd
+ http://www.springframework.org/schema/aop
+ http://www.springframework.org/schema/aop/spring-aop.xsd">
+ 
+ <aop:aspectj-autoproxy />
+
+<bean class="edu.met.p1.BankMain" />
+ 
+
+	<bean scope="prototype" class="edu.met.p1.Account" id="accountBean">
+		<property value="1211" name="acNo" />
+		<property value="Aniket" name="acName" />
+		<property value="5000" name="balance" />
+	</bean>
+
+</beans>
