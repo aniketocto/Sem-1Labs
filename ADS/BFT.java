@@ -1,92 +1,93 @@
-public class BFT 
-{ 
-int[][] adj;  
-boolean[] visited; 
-int[] queue;  
-int front,rear;  
-//constructor 
-public BFT(int v) 
-{ 
-//Adjacency matrix 
-//Track visited node 
-//Array-based queue 
-//Front and rear of the queue 
-adj = new int[v][v]; 
-visited = new boolean[v]; 
-queue = new int[v]; 
-front = -1; 
-rear = -1; 
-} 
-//Add an edge 
-public void AddEdge(int src,int dest) 
-{ 
-adj[src][dest] = 1; 
-  adj[dest][src] = 1; 
- } 
- 
- //Perform BFT 
- public void PerformBFT(int x) 
- { 
-  Enqueue(x);  //Enqueue the starting node 
-  visited[x] = true; 
-   
-  System.out.print("Breadth first Traversal:  "); 
-  while(front!=-1)  //Queue is not Empty 
-  { 
-   int curr = Dequeue();  //Dequeue 
-   System.out.print(curr+" "); //Process 
-  
-   for(int i=0 ; i<visited.length ; i++) //Enqueue all unvisited neighbour og curr 
-   { 
-    if(adj[curr][i]==1 && !visited[i]) 
-    { 
-     Enqueue(i); 
-     visited[i]=true; 
-    } 
-   } 
-  }//end of while 
- } 
- 
- //Enqueue 
- public void Enqueue(int x) 
- { 
-   
-  if(front==-1) 
-  { 
-   front++;  
-  } 
-  queue[++rear]= x; 
- } 
-  
- //Dequeue 
- public int Dequeue() 
- { 
-  int tmp = queue[front]; 
-   
-  if(front==rear) 
-  { 
-   front = rear =-1; 
-    
-  } 
-  else 
-  { 
-   front++; 
-  } 
-  return tmp; 
- } 
- 
- public static void main(String [] args) 
- { 
-  BFT g = new BFT(6); 
-   
-  //Add edges to graph 
-  g.AddEdge(0,1); 
-  g.AddEdge(0,3); 
-  g.AddEdge(1,2); 
-g.AddEdge(2,4); 
-g.AddEdge(3,4); 
-g.AddEdge(3,5); 
-g.AddEdge(4,5); 
-g.PerformBFT(3); 
-} 
-}//end of BFT
+public class BFT
+{
+    int[][] adj;          // Adjacency Matrix
+    boolean[] visited;    // To track visited nodes
+    int[] queue;          // Array-based queue
+    int front, rear;
+
+    // Constructor
+    public BFT(int v)
+    {
+        adj = new int[v][v];
+        visited = new boolean[v];
+        queue = new int[v];
+        front = -1;
+        rear = -1;
+    }
+
+    // Add an edge (Undirected Graph)
+    public void addEdge(int src, int dest)
+    {
+        adj[src][dest] = 1;
+        adj[dest][src] = 1;
+    }
+
+    // Perform Breadth First Traversal
+    public void performBFT(int start)
+    {
+        enqueue(start);
+        visited[start] = true;
+
+        System.out.print("Breadth First Traversal: ");
+
+        while (front != -1)   // Queue is not empty
+        {
+            int curr = dequeue();
+            System.out.print(curr + " ");
+
+            // Visit all unvisited neighbors
+            for (int i = 0; i < visited.length; i++)
+            {
+                if (adj[curr][i] == 1 && !visited[i])
+                {
+                    enqueue(i);
+                    visited[i] = true;
+                }
+            }
+        }
+    }
+
+    // Enqueue operation
+    public void enqueue(int x)
+    {
+        if (front == -1)
+        {
+            front = 0;
+        }
+        queue[++rear] = x;
+    }
+
+    // Dequeue operation
+    public int dequeue()
+    {
+        int temp = queue[front];
+
+        if (front == rear)
+        {
+            front = rear = -1;
+        }
+        else
+        {
+            front++;
+        }
+        return temp;
+    }
+
+    // Main Method
+    public static void main(String[] args)
+    {
+        BFT g = new BFT(6);
+
+        // Add edges
+        g.addEdge(0, 1);
+        g.addEdge(0, 3);
+        g.addEdge(1, 2);
+        g.addEdge(2, 4);
+        g.addEdge(3, 4);
+        g.addEdge(3, 5);
+        g.addEdge(4, 5);
+
+        // Perform BFS starting from node 3
+        g.performBFT(3);
+    }
+}
