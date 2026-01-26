@@ -188,6 +188,6 @@ public class BST {
                 default:
                     System.out.println("Invalid Choice!");
             }
-        } while (ch < 1 || ch > 7);
+        } while (ch != 7);
     }
 }
