@@ -1,3 +1,4 @@
+// Modulo Division Hash Table Implementation in Java
 class HashTable {
     private Integer[] table;
     private int size;
@@ -19,7 +20,7 @@ class HashTable {
             return;
         }
 
-        int index = Hash(key);
+        int index = Hash(key); 
 
         while (table[index] != null) {
             index = (index + 1) % capacity;
