@@ -19,6 +19,9 @@ index.jsp
 
 
 ////---------------------------------------------///
+PrintTable.jsp
+
+
 <%@ page language="java" errorPage="Error.jsp" %>
 <!DOCTYPE html>
 <html>
@@ -39,5 +42,19 @@ index.jsp
 			}
 		%>
 	</table>
+</body>
+</html>
+
+-----------------------------------------------------
+Error.jsp
+
+<%@ page language="java" isErrorPage="true" %>
+<!DOCTYPE html>
+<html>
+<body>
+	<h1>!!!!Something Went Wrong!!!!</h1>
+	<br>
+	<%= exception %>
+	<a href="index.jsp">Index</a>
 </body>
 </html>

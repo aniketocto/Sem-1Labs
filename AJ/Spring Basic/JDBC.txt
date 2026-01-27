@@ -71,6 +71,7 @@ public class MoviesDAO {
 		jdbcT.update(updateQ, m1.getmName(), m1.getDirector(), m1.getmId());
 	}
 	
+	//Select Query------------------------------------------
 	List<MovieBean> getAllMovies()
 	{
 		String selQ = "select * from tbl_movie";
@@ -106,6 +107,8 @@ public class MoviesImpl {
 		
 //		dao.updateRow(m1);
 		
+
+		//For select Query-------------------------------------------------
 		List<MovieBean> l1 = dao.getAllMovies();
 		
 		System.out.println("mId\t mName\t director");
@@ -124,6 +127,7 @@ public class MoviesImpl {
 
 /////-------------------------------------/////
 
+//Select Query----------------------------------------------------
 package edu.met.p1;
 
 import java.sql.ResultSet;

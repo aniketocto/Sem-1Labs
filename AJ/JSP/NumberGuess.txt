@@ -18,7 +18,7 @@ index.jsp
 
 
 ////-------------------------------------------------------------------------////
-next guess.jsp 
+NextGuess.jsp 
 
 	<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	 pageEncoding="ISO-8859-1"%>
@@ -53,7 +53,8 @@ next guess.jsp
 	</html>
 
 ////-------------------------------------------------------------------------////
-checkResult,jsp
+CheckResult.jsp
+
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
@@ -104,7 +105,8 @@ checkResult,jsp
 </html>
 
 ////-------------------------------------------------------------------------////
-winner.jsp
+Winner.jsp
+
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>

@@ -1,0 +1,40 @@
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql" %>
+
+<!DOCTYPE html>
+<html>
+<body>
+
+<sql:setDataSource 
+    var="myds"
+    driver="org.postgresql.Driver"
+    url="jdbc:postgresql://localhost:5432/postgres"
+    user="postgres"
+    password="password"
+    scope="application" />
+
+<sql:query var="myque" dataSource="${myds}" maxRows="5">
+    SELECT * FROM tbl_movie
+</sql:query>
+
+<table border="1">
+    <tr>
+        <th>Movie Id</th>
+        <th>Movie Name</th>
+        <th>Director</th>
+    </tr>
+
+    <c:forEach var="result" items="${myque.rows}">
+        <tr>
+            <td><c:out value="${result.mid}" /></td>
+            <td><c:out value="${result.mname}" /></td>
+            <td><c:out value="${result.director}" /></td>
+        </tr>
+    </c:forEach>
+</table>
+
+</body>
+</html>

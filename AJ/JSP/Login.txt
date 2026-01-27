@@ -1,0 +1,168 @@
+LoginBean.java
+
+package edu.met.p1;
+public class LoginBean {
+    String userName;
+    String password;
+    public LoginBean() {
+    }
+    public String getUserName() {
+        return userName;
+    }
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+    public String getPassword() {
+        return password;
+    }
+    public void setPassword(String password) {
+        this.password = password;
+    }
+    public boolean autenticate()
+    {
+        if(this.userName.equals("aniketocto") && this.password.equals("aniket123"))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+}
+
+=====================================================================================
+
+Login.jsp
+
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+ pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html>
+<html>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #f2f2f2;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+    }
+        form {
+        background: #fff;
+        padding: 30px 25px;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+        width: 320px;
+        text-align: center;
+    }
+    h1 {
+        font-size: 20px;
+        margin-bottom: 20px;
+        font-weight: bold;
+        color: #333;
+    }
+    input[type="text"] {
+        width: auto;
+        padding: 10px;
+        margin: 8px 0 15px 0;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 14px;
+    }
+    input[type="submit"] {
+        width: 100%;
+        padding: 10px;
+        background:#0056b3;
+        border: none;
+        color: #fff
+        font-size: 15px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight: bold;
+    }
+    input[type="submit"]:hover {
+        background: #e31e25;
+    }
+</style>
+<body>
+    <form action="Controller.jsp">
+        <H1>Mumbai Educational Trust</H1>
+        Username: <input type="text" name="txtUn" />
+        <br>
+        Password: <input type="text" name="txtPwd" />
+        <br>
+        <input type="submit" name="btnSub" value="Sign In" />
+    </form>
+</body>
+</html>
+
+
+
+=====================================================================================
+
+Controller.jsp
+
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+ pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html>
+<html>
+<body>
+<%
+//Get the username and password
+String un = request.getParameter("txtUn");
+String pwd = request.getParameter("txtPwd");
+%>
+<!-- Use the login bean -->
+<jsp:useBean id="login" class="edu.met.p1.LoginBean" scope="page" />
+<jsp:setProperty property="userName" name="login" value="<%=un %>"/>
+<jsp:setProperty property="password" name="login" value="<%=pwd
+%>"/>
+<%
+if(login.autenticate())
+{
+%>
+<jsp:forward page="Success.jsp">
+<jsp:param value="<%=un %>" name="userName"/>
+</jsp:forward>
+<%
+}
+else
+{
+%>
+<jsp:forward page="Failure.jsp" />
+<%
+}
+%>
+</body>
+</html>
+
+=====================================================================================
+
+
+Success.jsp
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+ pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html>
+<html>
+<head>
+<body>
+<h1>Welcome <%=request.getParameter("userName") %></h1>
+</body>
+</html>
+
+=====================================================================================
+
+
+
+Failure.jsp
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+ pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html>
+<html>
+<body>
+<h1>Invalid Username or password</h1>
+<a href="Login.jsp">Try Again</a>
+</body>
+</html>

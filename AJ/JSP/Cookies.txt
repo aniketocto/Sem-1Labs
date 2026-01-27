@@ -1,0 +1,41 @@
+<%@ page language="java" import="javax.servlet.http.*" %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Counter App</title>
+</head>
+<body>
+<%
+	Cookie[] cooks = request.getCookies();
+
+	if(cooks == null)
+	{
+		out.println("This is your first visit");
+		
+		Cookie c1 = new Cookie("counter", "1");
+		c1.setMaxAge(6);
+		
+		response.addCookie(c1);
+	}
+	else
+	{
+		for(Cookie temp:cooks)
+		{
+			if(temp.getName().equals("counter"))
+			{
+				int cnt = Integer.parseInt(temp.getValue());
+				
+				cnt++;
+				out.println("This is your Visit no.: " + cnt);
+				
+				temp.setValue(""+cnt);
+				temp.setMaxAge(60*60*24);
+				response.addCookie(temp);
+				break;
+			}
+		}
+	}
+%>
+</body>
+</html>
