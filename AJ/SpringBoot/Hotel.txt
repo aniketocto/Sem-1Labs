@@ -1,0 +1,133 @@
+Hotel.java
+
+package com.example.demo;
+
+public class Hotel {
+	int hid;
+	String hname;
+	String hcity;
+	int price;
+	public int getHid() {
+		return hid;
+	}
+	public void setHid(int hid) {
+		this.hid = hid;
+	}
+	public String getHname() {
+		return hname;
+	}
+	public void setHname(String hname) {
+		this.hname = hname;
+	}
+	public String getHcity() {
+		return hcity;
+	}
+	public void setHcity(String hcity) {
+		this.hcity = hcity;
+	}
+	public int getPrice() {
+		return price;
+	}
+	public void setPrice(int price) {
+		this.price = price;
+	}
+	public Hotel(int hid, String hname, String hcity, int price) {
+		super();
+		this.hid = hid;
+		this.hname = hname;
+		this.hcity = hcity;
+		this.price = price;
+	}
+	public Hotel() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+	
+	
+}
+
+
+
+-----------------------------------------------------------
+package com.example.demo;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import org.springframework.jdbc.core.RowMapper;
+
+public class HotelRowMapper implements RowMapper<Hotel> {
+	@Override
+	public Hotel mapRow(ResultSet rs, int rowNum) throws SQLException {
+	// TODO Auto-generated method stub
+	Hotel h1 = new Hotel();
+	h1.setHid(rs.getInt(1));
+	h1.setHname(rs.getString(2));
+	h1.setHcity(rs.getString(3));
+	h1.setPrice(rs.getInt(4));
+	return h1;
+	}
+
+}
+----------------------------------------------------------------
+package com.example.demo;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public class HotelRepository {
+	
+	@Autowired
+	JdbcTemplate jdbcT;
+	
+	public List<Hotel> getAll()
+	{
+		String sql = "Select * from tbl_hotel";
+		return jdbcT.query(sql, new HotelRowMapper());
+	}
+	
+	public List<Hotel> getById(String hid)
+	{
+		String sql = "Select * from tbl_hotel where hid = " + Integer.parseInt(hid);
+		return jdbcT.query(sql, new HotelRowMapper());
+	}
+
+}
+------------------------------------------------------------------------
+package com.example.demo;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+public class HomeController {
+	
+	@Autowired
+	HotelRepository hrepo;
+	
+	@GetMapping("/getall")
+	public List<Hotel> getAll()
+	{
+		return hrepo.getAll();
+	}
+	
+	@GetMapping("/getHotel/{hid}")
+	public List<Hotel> getById(@PathVariable("hid") String hid)
+	{
+		return hrepo.getById(hid);
+	}
+
+}
+---------------------------------------------------------------------
+spring.application.name=HotelApplication
+spring.datasource.url=jdbc:postgresql://localhost:5432/postgres
+spring.datasource.username=postgres
+spring.datasource.password=password

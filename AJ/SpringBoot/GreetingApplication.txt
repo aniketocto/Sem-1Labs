@@ -1,0 +1,20 @@
+package com.example.demo;
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+public class GreetingAppController {
+	
+	@GetMapping("/")
+	public String mainPage()
+	{
+		return "<HTML><BODY>WELCOME TO MET</BODY</HTML>";
+	}
+	
+	@GetMapping("/other")
+	public String otherPage()
+	{
+		return "<HTML><BODY>WELCOME TO MET ICS</BODY</HTML>";
+	}
+}
