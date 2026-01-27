@@ -127,6 +127,9 @@ public class HomeController {
 
 }
 ---------------------------------------------------------------------
+
+
+src/main/resource -> application.properties
 spring.application.name=HotelApplication
 spring.datasource.url=jdbc:postgresql://localhost:5432/postgres
 spring.datasource.username=postgres

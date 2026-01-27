@@ -1,0 +1,12 @@
+create table tbl_hotel
+(
+    hid int,
+    hcity varchar(30),
+    hstate varchar(30),
+    price int
+)
+
+
+select * from tbl_hotel
+
+insert into tbl_hotel(hid, hcity, hstate, price) values (, 'Mumbai', 'Maharashtra', 5000)
