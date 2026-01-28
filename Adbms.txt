@@ -1,14 +1,7 @@
 1.Learn basics set working directory, vectors and vector operations
 
 
-x<-5
-x
-class(x)
-length(x)
-y=(8.15)
-y
-class(y)
-length(y)
+
 
 b=seq (from=1,to =13, by=2)
 b
